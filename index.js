@@ -55,14 +55,12 @@ module.exports = function(conn){
 		};	
 		
 		// Push to redis
-		console.log('trying to push to redis');
 		client.rpush("resque:queue:userEventBuffer", JSON.stringify(resqueObj), function(err, replies){
 			if(err){
 				res.send(500, err);
 			}else{
 				res.send(200);
 				lastReq = new Date().getTime();
-				console.log('success: '+lastReq);
 			}
 		});
 		
