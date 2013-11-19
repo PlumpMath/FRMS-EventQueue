@@ -1,5 +1,6 @@
 var httputil = require('nodeunit').utils.httputil;
 var http = require('http');
+var util = require('util');
 
 //	Tests the Full URL
 exports.testCommonEventEventIdFullUrl = function(test) {
@@ -23,18 +24,24 @@ exports.testCommonEventEventIdFullUrl = function(test) {
 };
 
 //	Tests the URL with only eventid
-/*exports.testCommonEventEventIdJustId = function(test) {
+exports.testCommonEventEventIdJustId = function(test) {
 	var url = 'http://localhost:4000/log-event?eventid=CommunityTheater_Sm_Player_Impression';
+	
 	var req = http.request(url, function(res) {
 		var responseCode = res.statusCode;
 		console.log("Common ID Just Event ID: ", responseCode);
 		
-		test.equal(responseCode, 500, 'Just Event ID passed and sent 500 response code.');
-		test.done();
-		
-  		res.on('data', function(d) {
-    		process.stdout.write(d);
+		var data = '';
+		res.on('data', function(d) {
+    		console.log("data: " + d);
+    		//test.equal(d, '{"code":"InternalError","message":"Cannot read property \'PHPSESSID\' of undefined"}', 'JSON Obj Matches');
+    		//test.done();
   		});
+  		//data = JSON.parse(data)
+  		//console.log("data: " + data);
+  		
+  		test.equal(responseCode, 500, 'Just Event ID passed and sent 500 response code.');
+		test.done();
 	});
 	req.end();
 
@@ -42,4 +49,13 @@ exports.testCommonEventEventIdFullUrl = function(test) {
  		console.error(e);
 	});
 };
+
+
+/*
+	GIT Instructions
+	
+	1) git status
+	2) git add fileName.js (only if a file needs to be added)
+	3) git commit -m "message about the commit"
+	4) git push
 */
