@@ -29,6 +29,26 @@ module.exports = function(conn){
 		}      
       }
 
+    /**
+     * Returns a RFC 4122 compliant UUID
+     */
+    var guid = function(){
+    	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(match){
+    		if(match === 'x'){
+    			// Replace x's with a random hex digit
+    			return (Math.floor(Math.random() * 16)).toString(16);
+    		} else {
+    			// Replace y with one of 4 chars
+    			var options = ['8', '9', 'A', 'B'];
+    			return options[Math.floor(Math.random() * 4)];
+    		}
+    	});
+    };
+
+	client.on("error", function (err) {
+	    console.log("error event - " + client.host + ":" + client.port + " - " + err);
+	});
+	
      return {
       logevent: function(req, res, next) {
       
@@ -63,40 +83,8 @@ module.exports = function(conn){
 				lastReq = new Date().getTime();
 			}
 		});
-		
-		
-		   /**
-     * Returns a RFC 4122 compliant UUID
-     */
-    var guid = function(){
-    	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(match){
-    		if(match === 'x'){
-    			// Replace x's with a random hex digit
-    			return (Math.floor(Math.random() * 16)).toString(16);
-    		} else {
-    			// Replace y with one of 4 chars
-    			var options = ['8', '9', 'A', 'B'];
-    			return options[Math.floor(Math.random() * 4)];
-    		}
-    	});
-    };
-
-	client.on("error", function (err) {
-	    console.log("error event - " + client.host + ":" + client.port + " - " + err);
-	});
 	
-	
-	function createWorker() {
-	var worker = cluster.fork();
-	workers[worker.process.pid] = {worker:worker, lastCb: new Date().getTime() + 5000};
-	worker.on('message', function checkStatus(m) {
-		if(m.cmd === "processed") {
-			workers[m.process].lastCb = m.lastRequest;
-		}
-	})
-	console.log('worker'+worker);
-    }
-		
+			
 		//eof
       }
   
