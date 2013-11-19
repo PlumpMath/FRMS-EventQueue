@@ -1,6 +1,6 @@
 module.exports = function(conn){
 
-    client = conn;
+    var client = conn;
 	var lastReq = 0;
 
 	function isValid(req){
